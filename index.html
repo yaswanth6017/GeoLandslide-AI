@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GeoLandslide AI | NER Landslide Monitoring</title>
+
+    <!-- Leaflet Map -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="SIH2.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">🌍</div>
+
+            <div>
+                <h2>GeoLandslide</h2>
+                <span>AI MONITORING</span>
+            </div>
+        </div>
+
+        <div class="nav-title">MAIN</div>
+
+        <nav>
+
+            <button class="nav-item active" data-page="dashboard">
+                <span>📊</span>
+                Dashboard
+            </button>
+
+            <button class="nav-item" data-page="map">
+                <span>🗺️</span>
+                Live Zone Map
+            </button>
+
+            <button class="nav-item" data-page="sensors">
+                <span>📡</span>
+                Live IoT Sensors
+            </button>
+
+            <button class="nav-item" data-page="prediction">
+                <span>🤖</span>
+                AI Prediction
+            </button>
+
+            <div class="nav-title">SYSTEM</div>
+
+            <button class="nav-item" data-page="sources">
+                <span>🗄️</span>
+                Data Sources
+            </button>
+
+            <button class="nav-item" data-page="architecture">
+                <span>⚙️</span>
+                Architecture
+            </button>
+
+            <button class="nav-item" data-page="feasibility">
+                <span>✓</span>
+                Feasibility
+            </button>
+
+            <button class="nav-item" data-page="impact">
+                <span>🌱</span>
+                Impact
+            </button>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="connection">
+                <span class="connection-dot"></span>
+
+                <div>
+                    <strong>System Online</strong>
+                    <small>Monitoring active</small>
+                </div>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+        <!-- HEADER -->
+
+        <header class="header">
+
+            <div>
+                <h1 id="pageTitle">Dashboard</h1>
+
+                <p id="pageDescription">
+                    AI-based Early Warning & Landslide Risk Monitoring System
+                </p>
+            </div>
+
+            <div class="header-right">
+
+                <div class="live-indicator">
+                    <span></span>
+                    LIVE
+                </div>
+
+                <div class="time" id="clock">
+                    --:--:--
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================================================= -->
+        <!-- DASHBOARD -->
+        <!-- ================================================= -->
+
+        <section class="page active" id="dashboard">
+
+            <div class="welcome-card">
+
+                <div>
+
+                    <span class="eyebrow">
+                        NORTH EASTERN REGION OF INDIA
+                    </span>
+
+                    <h2>
+                        Landslide Risk Monitoring
+                    </h2>
+
+                    <p>
+                        Monitor environmental conditions, IoT sensor
+                        readings and AI-generated landslide risk across
+                        vulnerable zones.
+                    </p>
+
+                </div>
+
+                <button class="primary-btn" data-open="map">
+                    Open Live Map →
+                </button>
+
+            </div>
+
+
+            <!-- STAT CARDS -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon blue">🌧️</div>
+
+                    <div>
+                        <span>Rainfall</span>
+
+                        <strong id="dashboardRain">
+                            82
+                        </strong>
+
+                        <small>mm</small>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon purple">💧</div>
+
+                    <div>
+                        <span>Soil Moisture</span>
+
+                        <strong id="dashboardSoil">
+                            74
+                        </strong>
+
+                        <small>%</small>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon orange">📐</div>
+
+                    <div>
+                        <span>Ground Movement</span>
+
+                        <strong id="dashboardMovement">
+                            6.8
+                        </strong>
+
+                        <small>mm</small>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon red">⚠️</div>
+
+                    <div>
+                        <span>Current Risk</span>
+
+                        <strong id="dashboardRisk">
+                            CRITICAL
+                        </strong>
+
+                        <small id="dashboardScore">
+                            91/100
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DASHBOARD CONTENT -->
+
+            <div class="two-column">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Current Risk Status</h3>
+                            <span>Selected monitoring zone</span>
+                        </div>
+
+                        <span class="status-pill critical" id="dashboardStatus">
+                            CRITICAL
+                        </span>
+
+                    </div>
+
+
+                    <div class="risk-display">
+
+                        <div class="risk-circle" id="dashboardCircle">
+
+                            <div>
+                                <strong id="dashboardCircleScore">
+                                    91
+                                </strong>
+
+                                <span>/100</span>
+                            </div>
+
+                        </div>
+
+                        <div class="risk-info">
+
+                            <h3 id="dashboardZone">
+                                Shillong
+                            </h3>
+
+                            <p id="dashboardReason">
+                                High rainfall, elevated soil moisture
+                                and abnormal ground movement detected.
+                            </p>
+
+                            <button class="outline-btn" data-open="prediction">
+                                View AI Prediction
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Monitoring Zones</h3>
+                            <span>NER priority locations</span>
+                        </div>
+
+                    </div>
+
+                    <div id="dashboardZones"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- LIVE ZONE MAP -->
+        <!-- ================================================= -->
+
+        <section class="page" id="map">
+
+            <div class="page-heading">
+
+                <div>
+                    <h2>Live Zone Map</h2>
+
+                    <p>
+                        Interactive geographical view of landslide
+                        risk across monitored NER locations.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="map-layout">
+
+                <div class="card map-card">
+
+                    <div id="riskMap"></div>
+
+                </div>
+
+
+                <div class="card zone-details">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3 id="selectedZoneName">
+                                Shillong Monitoring Zone
+                            </h3>
+
+                            <span>
+                                Selected location
+                            </span>
+                        </div>
+
+                        <span
+                            class="status-pill critical"
+                            id="selectedZoneRisk"
+                        >
+                            CRITICAL
+                        </span>
+
+                    </div>
+
+
+                    <div class="zone-score">
+
+                        <strong id="selectedScore">
+                            91
+                        </strong>
+
+                        <span>/100</span>
+
+                    </div>
+
+
+                    <div id="zoneInputs"></div>
+
+
+                    <div class="map-actions">
+
+                        <button class="primary-btn" id="zoomZone">
+                            Zoom to Zone
+                        </button>
+
+                        <button class="outline-btn" data-open="sensors">
+                            View Sensors
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- LIVE IOT SENSORS -->
+        <!-- ================================================= -->
+
+        <section class="page" id="sensors">
+
+            <div class="page-heading">
+
+                <div>
+                    <h2>Live IoT Sensors</h2>
+
+                    <p>
+                        Real-time environmental telemetry from
+                        monitoring devices.
+                    </p>
+                </div>
+
+                <button class="primary-btn" id="refreshSensors">
+                    ↻ Refresh
+                </button>
+
+            </div>
+
+
+            <div class="sensor-grid">
+
+                <div class="sensor-card">
+
+                    <div class="sensor-top">
+                        <span class="sensor-icon">🌧️</span>
+
+                        <span class="sensor-online">
+                            ● ONLINE
+                        </span>
+                    </div>
+
+                    <span>Rainfall Sensor</span>
+
+                    <strong>
+                        <span id="sensorRain">82</span>
+                        <small>mm</small>
+                    </strong>
+
+                    <div class="progress">
+                        <i id="rainBar"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="sensor-card">
+
+                    <div class="sensor-top">
+                        <span class="sensor-icon">💧</span>
+
+                        <span class="sensor-online">
+                            ● ONLINE
+                        </span>
+                    </div>
+
+                    <span>Soil Moisture</span>
+
+                    <strong>
+                        <span id="sensorSoil">74</span>
+                        <small>%</small>
+                    </strong>
+
+                    <div class="progress">
+                        <i id="soilBar"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="sensor-card">
+
+                    <div class="sensor-top">
+                        <span class="sensor-icon">📈</span>
+
+                        <span class="sensor-online">
+                            ● ONLINE
+                        </span>
+                    </div>
+
+                    <span>Ground Movement</span>
+
+                    <strong>
+                        <span id="sensorMovement">6.8</span>
+                        <small>mm</small>
+                    </strong>
+
+                    <div class="progress">
+                        <i id="movementBar"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="sensor-card">
+
+                    <div class="sensor-top">
+                        <span class="sensor-icon">📐</span>
+
+                        <span class="sensor-online">
+                            ● ONLINE
+                        </span>
+                    </div>
+
+                    <span>Tilt Sensor</span>
+
+                    <strong>
+                        <span id="sensorTilt">3.2</span>
+                        <small>°</small>
+                    </strong>
+
+                    <div class="progress">
+                        <i id="tiltBar"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="two-column">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Live Sensor Trend</h3>
+                            <span>Latest telemetry</span>
+                        </div>
+
+                    </div>
+
+                    <canvas id="sensorChart"></canvas>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Sensor Health</h3>
+                            <span>Device connectivity</span>
+                        </div>
+
+                    </div>
+
+                    <div class="health-list">
+
+                        <div>
+                            <span>Rainfall sensor</span>
+                            <b>CONNECTED</b>
+                        </div>
+
+                        <div>
+                            <span>Soil sensor</span>
+                            <b>CONNECTED</b>
+                        </div>
+
+                        <div>
+                            <span>Movement sensor</span>
+                            <b>CONNECTED</b>
+                        </div>
+
+                        <div>
+                            <span>Tilt sensor</span>
+                            <b>CONNECTED</b>
+                        </div>
+
+                        <div>
+                            <span>Last update</span>
+                            <b id="sensorUpdate">Now</b>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- AI PREDICTION -->
+        <!-- ================================================= -->
+
+        <section class="page" id="prediction">
+
+            <div class="page-heading">
+
+                <div>
+                    <h2>AI Landslide Prediction</h2>
+
+                    <p>
+                        Explainable multi-factor risk prediction
+                        with safety-rule verification.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="prediction-grid">
+
+                <div class="card prediction-main">
+
+                    <span class="eyebrow">
+                        CURRENT PREDICTION
+                    </span>
+
+                    <div class="prediction-score">
+
+                        <strong id="aiScore">
+                            91
+                        </strong>
+
+                        <span>/100</span>
+
+                    </div>
+
+                    <div
+                        class="prediction-level critical"
+                        id="aiLevel"
+                    >
+                        CRITICAL RISK
+                    </div>
+
+                    <p id="aiMessage">
+                        Multiple environmental indicators are
+                        currently elevated.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Risk Factors</h3>
+                            <span>Contribution to prediction</span>
+                        </div>
+
+                    </div>
+
+                    <div id="riskFactors"></div>
+
+                </div>
+
+            </div>
+
+
+            <div class="card explanation-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h3>Why is the area at risk?</h3>
+
+                        <span>
+                            Explainable AI output
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="explanation-grid">
+
+                    <div class="explanation-step">
+                        <span>01</span>
+                        <strong>Environmental Data</strong>
+                        <p>
+                            Rainfall, soil, slope and elevation
+                            are evaluated.
+                        </p>
+                    </div>
+
+                    <div class="explanation-step">
+                        <span>02</span>
+                        <strong>Sensor Conditions</strong>
+                        <p>
+                            Ground movement and tilt are
+                            continuously checked.
+                        </p>
+                    </div>
+
+                    <div class="explanation-step">
+                        <span>03</span>
+                        <strong>Risk Engine</strong>
+                        <p>
+                            Weighted factors produce a normalized
+                            landslide risk score.
+                        </p>
+                    </div>
+
+                    <div class="explanation-step">
+                        <span>04</span>
+                        <strong>Safety Check</strong>
+                        <p>
+                            Rule-based thresholds verify critical
+                            conditions.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- DATA SOURCES -->
+        <!-- ================================================= -->
+
+        <section class="page" id="sources">
+
+            <!-- Duplicate page-heading REMOVED -->
+
+
+            <div class="source-grid">
+
+                <div class="source-card">
+                    <span>🌧️</span>
+                    <h3>Rainfall</h3>
+                    <p>
+                        Current rainfall measurements are used
+                        to identify rainfall-driven landslide risk.
+                    </p>
+                    <b>IoT / Weather API</b>
+                </div>
+
+                <div class="source-card">
+                    <span>⛰️</span>
+                    <h3>Slope</h3>
+                    <p>
+                        Terrain slope contributes to the
+                        susceptibility of an area.
+                    </p>
+                    <b>Terrain Dataset</b>
+                </div>
+
+                <div class="source-card">
+                    <span>📍</span>
+                    <h3>Elevation</h3>
+                    <p>
+                        Elevation information provides
+                        geographical context for monitoring zones.
+                    </p>
+                    <b>DEM / GIS Data</b>
+                </div>
+
+                <div class="source-card">
+                    <span>💧</span>
+                    <h3>Soil Condition</h3>
+                    <p>
+                        Soil moisture is monitored to detect
+                        potentially unstable ground conditions.
+                    </p>
+                    <b>IoT Sensor</b>
+                </div>
+
+                <div class="source-card">
+                    <span>📚</span>
+                    <h3>Historical Landslides</h3>
+                    <p>
+                        Historical records help estimate
+                        susceptibility and priority.
+                    </p>
+                    <b>Historical Dataset</b>
+                </div>
+
+                <div class="source-card">
+                    <span>📡</span>
+                    <h3>Ground Sensors</h3>
+                    <p>
+                        Movement and tilt measurements help
+                        identify abnormal ground behavior.
+                    </p>
+                    <b>ESP32 / IoT</b>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- ARCHITECTURE -->
+        <!-- ================================================= -->
+
+        <section class="page" id="architecture">
+
+            <!-- Duplicate page-heading REMOVED -->
+
+
+            <div class="architecture-flow">
+
+                <div class="architecture-box blue">
+                    <span>01</span>
+                    <strong>IoT Sensors</strong>
+                    <p>
+                        Rainfall<br>
+                        Soil Moisture<br>
+                        Ground Movement<br>
+                        Tilt
+                    </p>
+                </div>
+
+                <div class="arrow">→</div>
+
+                <div class="architecture-box purple">
+                    <span>02</span>
+                    <strong>Data Layer</strong>
+                    <p>
+                        API<br>
+                        Validation<br>
+                        Storage<br>
+                        Environmental Data
+                    </p>
+                </div>
+
+                <div class="arrow">→</div>
+
+                <div class="architecture-box orange">
+                    <span>03</span>
+                    <strong>AI / ML Engine</strong>
+                    <p>
+                        Feature Processing<br>
+                        Risk Prediction<br>
+                        Risk Score
+                    </p>
+                </div>
+
+                <div class="arrow">→</div>
+
+                <div class="architecture-box red">
+                    <span>04</span>
+                    <strong>Safety Layer</strong>
+                    <p>
+                        Threshold Checks<br>
+                        Risk Classification<br>
+                        Warning Logic
+                    </p>
+                </div>
+
+                <div class="arrow">→</div>
+
+                <div class="architecture-box green">
+                    <span>05</span>
+                    <strong>Web Application</strong>
+                    <p>
+                        Map<br>
+                        Sensors<br>
+                        AI Prediction<br>
+                        Monitoring
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="architecture-note">
+
+                <strong>Human Oversight</strong>
+
+                <p>
+                    AI provides a risk assessment and supporting
+                    evidence. Authorities remain responsible for
+                    verification and final preventive or emergency
+                    decisions.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- FEASIBILITY -->
+        <!-- ================================================= -->
+
+        <section class="page" id="feasibility">
+
+            <!-- Duplicate page-heading REMOVED -->
+
+
+            <div class="feasibility-grid">
+
+                <div class="feasibility-card">
+                    <div>⚙️</div>
+                    <h3>Technical Feasibility</h3>
+                    <p>
+                        IoT sensors, APIs, GIS mapping, machine
+                        learning and web technologies can be
+                        integrated into one monitoring platform.
+                    </p>
+                </div>
+
+                <div class="feasibility-card">
+                    <div>💰</div>
+                    <h3>Economic Feasibility</h3>
+                    <p>
+                        Low-cost IoT hardware and open-source
+                        software can reduce deployment and
+                        monitoring costs.
+                    </p>
+                </div>
+
+                <div class="feasibility-card">
+                    <div>📈</div>
+                    <h3>Scalability</h3>
+                    <p>
+                        Additional monitoring zones and sensor
+                        nodes can be added through the API-based
+                        architecture.
+                    </p>
+                </div>
+
+                <div class="feasibility-card">
+                    <div>🏛️</div>
+                    <h3>Operational Feasibility</h3>
+                    <p>
+                        Authorities can use the platform as a
+                        decision-support system alongside existing
+                        monitoring practices.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="feasibility-banner">
+
+                <div>
+                    <span class="eyebrow">IMPLEMENTATION PATH</span>
+
+                    <h3>
+                        Prototype → IoT Integration → ML Deployment
+                    </h3>
+                </div>
+
+                <div class="implementation-status">
+
+                    <span>✓ Prototype</span>
+                    <span>→ API</span>
+                    <span>→ ESP32</span>
+                    <span>→ ML Model</span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- IMPACT -->
+        <!-- ================================================= -->
+
+        <section class="page" id="impact">
+
+            <!-- Duplicate page-heading REMOVED -->
+
+
+            <div class="impact-hero">
+
+                <div>
+
+                    <span class="eyebrow">
+                        EXPECTED OUTCOME
+                    </span>
+
+                    <h2>
+                        From reactive response<br>
+                        to data-informed preparedness.
+                    </h2>
+
+                    <p>
+                        The system combines continuous monitoring,
+                        AI-based prediction and human oversight to
+                        support faster identification of potentially
+                        dangerous landslide conditions.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="impact-grid">
+
+                <div class="impact-card">
+                    <span>01</span>
+                    <h3>Early Identification</h3>
+                    <p>
+                        Detect changing environmental conditions
+                        before they develop into severe risk.
+                    </p>
+                </div>
+
+                <div class="impact-card">
+                    <span>02</span>
+                    <h3>Reduced Risk</h3>
+                    <p>
+                        Help authorities prioritize vulnerable
+                        locations and preventive action.
+                    </p>
+                </div>
+
+                <div class="impact-card">
+                    <span>03</span>
+                    <h3>Infrastructure Protection</h3>
+                    <p>
+                        Support monitoring of roads, settlements
+                        and other vulnerable infrastructure.
+                    </p>
+                </div>
+
+                <div class="impact-card">
+                    <span>04</span>
+                    <h3>Better Preparedness</h3>
+                    <p>
+                        Provide timely information for faster,
+                        data-informed disaster response.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="final-objective">
+
+                <strong>
+                    OUR OBJECTIVE
+                </strong>
+
+                <p>
+                    Improve early landslide detection, reduce
+                    potential damage to lives and infrastructure,
+                    and strengthen disaster preparedness in the
+                    North Eastern Region of India.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- Leaflet -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Application JS -->
+<script src="SIH2.js"></script>
+
+</body>
+</html>
